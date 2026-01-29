@@ -1,6 +1,6 @@
 import pandas as pd
-import psycopg2
-from psycopg2.extras import execute_values
+import psycopg
+from psycopg.extras import execute_values
 import time
 import random
 from datetime import datetime
@@ -14,7 +14,7 @@ class TransactionStreamer:
         self.current_index = 0
 
     def connect_db(self):
-        return psycopg2.connect(**self.db_config)
+        return psycopg.connect(**self.db_config)
 
     def create_table(self):
         conn = self.connect_db()
