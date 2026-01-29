@@ -1,9 +1,10 @@
 # Steps for ingestion
 
 ```bash
-python3 -m venv envv                # create enviroment envv
-source ./envv/bin/activate          # active the envv
+python3 -m venv venv                # create enviroment venv
+source ./venv/bin/activate          # active the venv
 pip install -r requirements.txt     # install requirements
+python stream_simulator.py          # run script
 ```
 
 ## Issues
