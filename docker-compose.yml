@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: fraud_postgres
+    environment:
+      POSTGRES_USER: mlops_user
+      POSTGRES_PASSWORD: mlops_password
+      POSTGRES_DB: fraud_detection
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mlops_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: fraud_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
+  fastapi:
+    build:
+      context: ./services/api
+      dockerfile: Dockerfile
+    container_name: fraud_api
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://mlops_user:mlops_password@postgres:5432/fraud_detection
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    volumes:
+      - ./services/api:/app
+
+volumes:
+  postgres_data:
+  redis_data:
