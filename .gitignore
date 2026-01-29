@@ -1,5 +1,11 @@
 # data set
 data/creditcard.csv
 
+# Python cache files for services
 services/api/__pycache__
 services/ingestion/venv
+
+# Jupyter Notebook checkpoints
+notebooks/__pycache__
+notebooks/*.ipynb_checkpoints
+notebooks/.venv
