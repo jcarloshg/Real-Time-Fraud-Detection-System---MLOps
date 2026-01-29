@@ -2,3 +2,4 @@
 data/creditcard.csv
 
 services/api/__pycache__
+services/ingestion/venv
