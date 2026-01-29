@@ -1,0 +1,93 @@
+### API Base URL
+@baseUrl = http://localhost:8000
+
+###############################################
+# 1. Root Endpoint - Check API Status
+###############################################
+
+### GET Root
+GET {{baseUrl}}/
+Content-Type: application/json
+
+###############################################
+# 2. Health Check
+###############################################
+
+### GET Health Check
+GET {{baseUrl}}/health
+Content-Type: application/json
+
+###############################################
+# 3. Create Transaction
+###############################################
+
+### POST Create Transaction - Valid Request
+POST {{baseUrl}}/transactions/
+Content-Type: application/json
+
+{
+  "amount": 150.50,
+  "merchant_category": "electronics"
+}
+
+###
+
+### POST Create Transaction - High Amount (Potential Fraud)
+POST {{baseUrl}}/transactions/
+Content-Type: application/json
+
+{
+  "amount": 5000.00,
+  "merchant_category": "jewelry"
+}
+
+###
+
+### POST Create Transaction - Low Amount
+POST {{baseUrl}}/transactions/
+Content-Type: application/json
+
+{
+  "amount": 10.99,
+  "merchant_category": "food"
+}
+
+###
+
+### POST Create Transaction - Different Categories
+POST {{baseUrl}}/transactions/
+Content-Type: application/json
+
+{
+  "amount": 250.75,
+  "merchant_category": "travel"
+}
+
+###
+
+### POST Create Transaction - Invalid (Missing Field) - Should Fail
+POST {{baseUrl}}/transactions/
+Content-Type: application/json
+
+{
+  "amount": 100.00
+}
+
+###
+
+### POST Create Transaction - Invalid (Wrong Type) - Should Fail
+POST {{baseUrl}}/transactions/
+Content-Type: application/json
+
+{
+  "amount": "not-a-number",
+  "merchant_category": "electronics"
+}
+
+###############################################
+# 4. Get Transaction Count
+###############################################
+
+### GET Transaction Count
+GET {{baseUrl}}/transactions/count
+Content-Type: application/json
