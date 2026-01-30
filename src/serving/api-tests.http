@@ -1,0 +1,174 @@
+### Fraud Detection API Tests
+### Base URL
+@baseUrl = http://localhost:8000
+
+###############################################################################
+# 1. Root Endpoint
+###############################################################################
+
+### Get API root information
+GET {{baseUrl}}/
+Content-Type: application/json
+
+###############################################################################
+# 2. Health Check
+###############################################################################
+
+### Check API health status
+GET {{baseUrl}}/health
+Content-Type: application/json
+
+###############################################################################
+# 3. Create Transactions
+###############################################################################
+
+### Create a legitimate transaction (minimal fields)
+POST {{baseUrl}}/transactions/
+Content-Type: application/json
+
+{
+  "transaction_id": "tx_001",
+  "amount": 149.99,
+  "is_fraud": 0
+}
+
+###
+
+### Create a fraudulent transaction (with all v1-v28 features)
+POST {{baseUrl}}/transactions/
+Content-Type: application/json
+
+{
+  "transaction_id": "tx_002",
+  "amount": 2500.00,
+  "time": 0.0,
+  "v1": -1.359807134,
+  "v2": -0.072781173,
+  "v3": 2.536346738,
+  "v4": 1.378155224,
+  "v5": -0.338320770,
+  "v6": 0.462387778,
+  "v7": 0.239598554,
+  "v8": 0.098697901,
+  "v9": 0.363786970,
+  "v10": 0.090794172,
+  "v11": -0.551599533,
+  "v12": -0.617800856,
+  "v13": -0.991389847,
+  "v14": -0.311169354,
+  "v15": 1.468176972,
+  "v16": -0.470400525,
+  "v17": 0.207971242,
+  "v18": 0.025790613,
+  "v19": 0.403992960,
+  "v20": 0.251412098,
+  "v21": -0.018306778,
+  "v22": 0.277837576,
+  "v23": -0.110473910,
+  "v24": 0.066928075,
+  "v25": 0.128539358,
+  "v26": -0.189114844,
+  "v27": 0.133558377,
+  "v28": -0.021053053,
+  "is_fraud": 1
+}
+
+###
+
+### Create another legitimate transaction
+POST {{baseUrl}}/transactions/
+Content-Type: application/json
+
+{
+  "transaction_id": "tx_003",
+  "amount": 50.75,
+  "time": 1.0,
+  "v1": 0.5,
+  "v2": -0.3,
+  "is_fraud": 0
+}
+
+###
+
+### Create a high-value transaction
+POST {{baseUrl}}/transactions/
+Content-Type: application/json
+
+{
+  "transaction_id": "tx_004",
+  "amount": 9999.99,
+  "time": 2.5,
+  "is_fraud": 1
+}
+
+###############################################################################
+# 4. Get Transaction Count
+###############################################################################
+
+### Get total transaction count
+GET {{baseUrl}}/transactions/count
+Content-Type: application/json
+
+###############################################################################
+# 5. Get Transaction Statistics
+###############################################################################
+
+### Get transaction statistics
+GET {{baseUrl}}/transactions/stats
+Content-Type: application/json
+
+###############################################################################
+# 6. Get Specific Transaction
+###############################################################################
+
+### Get transaction by ID (from cache or database)
+GET {{baseUrl}}/transactions/tx_001
+Content-Type: application/json
+
+###
+
+### Get another transaction by ID
+GET {{baseUrl}}/transactions/tx_002
+Content-Type: application/json
+
+###
+
+### Get non-existent transaction (should return 404)
+GET {{baseUrl}}/transactions/tx_999999
+Content-Type: application/json
+
+###############################################################################
+# 7. Error Cases
+###############################################################################
+
+### Create transaction with invalid amount (negative)
+POST {{baseUrl}}/transactions/
+Content-Type: application/json
+
+{
+  "transaction_id": "tx_error_001",
+  "amount": -100.00,
+  "is_fraud": 0
+}
+
+###
+
+### Create transaction with missing required fields
+POST {{baseUrl}}/transactions/
+Content-Type: application/json
+
+{
+  "transaction_id": "tx_error_002"
+}
+
+###
+
+### Create transaction with invalid data types
+POST {{baseUrl}}/transactions/
+Content-Type: application/json
+
+{
+  "transaction_id": "tx_error_003",
+  "amount": "not_a_number",
+  "is_fraud": 0
+}
