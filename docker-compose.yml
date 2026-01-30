@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   postgres:
@@ -12,11 +12,14 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./infrastructure/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U mlops_user -d fraud_detection"]
-      interval: 20s
-      timeout: 10s
+      interval: 10s
+      timeout: 5s
       retries: 5
+    networks:
+      - fraud-network
 
   redis:
     image: redis:7-alpine
@@ -26,10 +29,12 @@ services:
     volumes:
       - redis_data:/data
     command: redis-server --appendonly yes
+    networks:
+      - fraud-network
 
   fastapi:
     build:
-      context: ./services/api
+      context: ./src/serving
       dockerfile: Dockerfile
     container_name: fraud_api
     ports:
@@ -40,11 +45,15 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      redis:
-        condition: service_started
     volumes:
-      - ./services/api:/app
+      - ./src/serving:/app
+    networks:
+      - fraud-network
 
 volumes:
   postgres_data:
   redis_data:
+
+networks:
+  fraud-network:
+    driver: bridge

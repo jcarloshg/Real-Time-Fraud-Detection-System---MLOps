@@ -1,11 +1,14 @@
-# data set
-data/creditcard.csv
+data/raw/*
+data/processed/*
+*.pyc
+__pycache__/
+.ipynb_checkpoints/
+mlflow_artifacts/
 
-# Python cache files for services
-services/api/__pycache__
-services/ingestion/venv
 
-# Jupyter Notebook checkpoints
-notebooks/__pycache__
-notebooks/*.ipynb_checkpoints
-notebooks/.venv
+# Ignore environment files
+.env
+venv/
+.venv/
+env/
+*.env
