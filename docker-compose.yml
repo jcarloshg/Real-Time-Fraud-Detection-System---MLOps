@@ -59,7 +59,8 @@ services:
       - MLFLOW_BACKEND_STORE_URI=postgresql://mlops_user:mlops_password@postgres:5432/mlflow_db
       - MLFLOW_ARTIFACT_ROOT=/mlflow/artifacts
     volumes:
-      - mlflow_artifacts:/mlflow/artifacts
+    # create its own volume for mlflow artifacts
+      - ./mlruns/artifacts:/mlflow/artifacts
     depends_on:
       postgres:
         condition: service_healthy
@@ -75,7 +76,6 @@ services:
 volumes:
   postgres_data:
   redis_data:
-  mlflow_artifacts: # Add this line
 
 networks:
   fraud-network:
