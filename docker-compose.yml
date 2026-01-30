@@ -49,7 +49,9 @@ services:
       - fraud-network
 
   mlflow:
-    image: ghcr.io/mlflow/mlflow:v2.9.2
+    build:
+      context: ./infrastructure
+      dockerfile: Dockerfile.mlflow
     container_name: fraud_mlflow
     ports:
       - "5000:5000"
