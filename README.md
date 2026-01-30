@@ -25,3 +25,15 @@ sudo docker compose ps mlflow
 # View logs to ensure no errors
 sudo docker compose logs -f mlflow
 ```
+
+## Steps for PHASE 3
+
+### 1.5 Create Feast registry database:
+
+```bash
+# Create database for Feast registry
+docker exec -it fraud_postgres psql -U mlops_user -d postgres -c "CREATE DATABASE feast_registry;"
+
+# Verify
+docker exec -it fraud_postgres psql -U mlops_user -d postgres -c "\l" | grep feast
+```
