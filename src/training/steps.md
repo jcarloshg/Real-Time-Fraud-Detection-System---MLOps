@@ -10,11 +10,11 @@ pip install -r requirements.txt
 python3.12 prepare_data.py
 
 # 2.
-python3.12 train_baseline.py
+sudo ./venv/bin/python3.12 train_baseline.py
 
 # 3.
-python3.12 train_advanced.py
+sudo ./venv/bin/python3.12 train_advanced.py
 
 # 4. 
-python3.12 register_model.py
+sudo ./venv/bin/python3.12 register_model.py
 ```
