@@ -4,6 +4,7 @@ data/processed/*
 __pycache__/
 .ipynb_checkpoints/
 mlflow_artifacts/
+mlruns/
 
 
 # Ignore environment files
