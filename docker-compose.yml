@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   postgres:
     image: postgres:15
@@ -50,9 +48,32 @@ services:
     networks:
       - fraud-network
 
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.9.2
+    container_name: fraud_mlflow
+    ports:
+      - "5000:5000"
+    environment:
+      - MLFLOW_BACKEND_STORE_URI=postgresql://mlops_user:mlops_password@postgres:5432/mlflow_db
+      - MLFLOW_ARTIFACT_ROOT=/mlflow/artifacts
+    volumes:
+      - mlflow_artifacts:/mlflow/artifacts
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: >
+      mlflow server
+      --backend-store-uri postgresql://mlops_user:mlops_password@postgres:5432/mlflow_db
+      --default-artifact-root /mlflow/artifacts
+      --host 0.0.0.0
+      --port 5000
+    networks:
+      - fraud-network
+
 volumes:
   postgres_data:
   redis_data:
+  mlflow_artifacts: # Add this line
 
 networks:
   fraud-network:
